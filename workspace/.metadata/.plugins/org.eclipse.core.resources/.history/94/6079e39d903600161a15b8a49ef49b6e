@@ -1,0 +1,9 @@
+import javax.swing.JFrame;
+import javax.swing.JLabel;
+
+public class Game extends JFrame{
+	JLabel firstLabel  = new JLabel("");
+	JLabel secondLabel  = new JLabel("");
+	JLabel thirdLabel  = new JLabel("");
+
+}

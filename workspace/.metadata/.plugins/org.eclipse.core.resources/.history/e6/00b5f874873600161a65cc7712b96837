@@ -1,0 +1,15 @@
+import javax.swing.*;
+
+public class VServerframe extends JFrame{
+	
+	public VServerframe(){
+		super("어휘서버");
+		setSize(300, 300);
+		setVisible(true); //event dispatcher 스레드 생성
+	}
+	
+	public static void main(String args[]){
+		new VServerframe();
+		
+	}
+}

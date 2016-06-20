@@ -1,0 +1,15 @@
+import javax.swing.*;
+
+public class VServerframe extends JFrame{
+	
+	public VServerframe(){
+		super("¾îÈÖ¼­¹ö");
+		setSize(300, 300);
+		setVisible(true);
+	}
+	
+	public static void main(String args[]){
+		new VServerframe();
+		
+	}
+}

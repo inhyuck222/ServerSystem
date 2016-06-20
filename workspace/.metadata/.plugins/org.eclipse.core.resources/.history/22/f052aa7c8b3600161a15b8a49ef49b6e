@@ -1,0 +1,52 @@
+import java.awt.*;
+import java.awt.event.*;
+import java.util.HashMap;
+
+import javax.swing.*;
+
+public class VServerframe extends JFrame{
+	JLabel engText = new JLabel("영어");
+	JTextField tfEng = new JTextField(10);
+	JLabel korText = new JLabel("한글");
+	JTextField tfKor = new JTextField(10);
+	JButton storeBtn = new JButton("저장");
+	JButton searchBtn = new JButton("검색");
+	
+	HashMap<String, String> dic = new HashMap<String, String>();
+	
+	public VServerframe(){
+		super("어휘서버");
+		setSize(300, 300);
+		
+		Container c = this.getContentPane();
+		c.setLayout(new FlowLayout());
+		c.add(engText); c.add(tfEng); c.add(korText); c.add(tfKor); c.add(storeBtn); c.add(searchBtn);
+		
+		MyActionListener al = new MyActionListener();
+		storeBtn.addActionListener(al); searchBtn.addActionListener(al);
+		
+		setVisible(true); //event dispatcher 스레드 생성
+	}
+	
+	class MyActionListener implements ActionListener{
+		public void actionPerformed(ActionEvent e){
+			JButton b = (JButton)e.getSource();
+			if(b == storeBtn) {
+				String eng = tfEng.getText();
+				String kor = tfKor.getText();
+				dic.put(eng, kor);
+				tfEng.removeAll();
+				tfKor.removeAll();
+			} else {
+				String eng = tfEng.getText();
+				String kor = dic.get(eng);
+				
+			}
+		}
+	}
+	
+	public static void main(String args[]){
+		new VServerframe();
+		
+	}
+}

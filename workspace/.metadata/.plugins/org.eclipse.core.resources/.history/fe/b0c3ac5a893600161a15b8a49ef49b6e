@@ -1,0 +1,22 @@
+import java.awt.*;
+import javax.swing.*;
+
+public class VServerframe extends JFrame{
+	JLabel engText = new JLabel("영어");
+	JLabel korText = new JLabel("한글");
+	
+	public VServerframe(){
+		super("어휘서버");
+		setSize(300, 300);
+		setVisible(true); //event dispatcher 스레드 생성
+		
+		Container c = this.getContentPane();
+		c.setLayout(new FlowLayout());
+		
+	}
+	
+	public static void main(String args[]){
+		new VServerframe();
+		
+	}
+}

@@ -1,0 +1,18 @@
+import javax.swing.JFrame;
+import javax.swing.JLabel;
+
+public class Game extends JFrame{
+	JLabel firstLabel  = new JLabel("");
+	JLabel secondLabel  = new JLabel("");
+	JLabel thirdLabel  = new JLabel("");
+
+	
+	public Game(){
+		super("¾ß¹Ì");
+		setSize(300,300);
+	}
+	
+	public static void main(String args[]){	
+		new Game();
+	}
+}
