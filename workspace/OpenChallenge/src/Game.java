@@ -1,5 +1,6 @@
 import java.awt.Container;
 import java.awt.FlowLayout;
+import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 
@@ -24,35 +25,8 @@ public class Game extends JFrame{
 		c.add(secondLabel);
 		c.add(thirdLabel);
 		c.add(tf);
-		this.addMouseListener(new MouseListener() {
-			
-			@Override
-			public void mouseReleased(MouseEvent e) {
-				// TODO Auto-generated method stub
-				
-			}
-			
-			@Override
-			public void mousePressed(MouseEvent e) {
-				// TODO Auto-generated method stub
-				
-			}
-			
-			@Override
-			public void mouseExited(MouseEvent e) {
-				// TODO Auto-generated method stub
-				
-			}
-			
-			@Override
-			public void mouseEntered(MouseEvent e) {
-				// TODO Auto-generated method stub
-				
-			}
-			
-			@Override
-			public void mouseClicked(MouseEvent e) {
-				// TODO Auto-generated method stub
+		this.addMouseListener(new MouseAdapter() {
+			public void mousePressed(MouseEvent e){
 				int a, b, c;
 				a = 0; b = 1; c = 2;
 				for(int i=0; i<3; i++){
