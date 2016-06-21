@@ -1,0 +1,30 @@
+import javax.swing.JFrame;
+import javax.swing.JLabel;
+import javax.swing.JPanel;
+
+public class GameFrame extends JFrame{
+	
+	GameFrame(){
+		setTitle("moster");
+		setSize(500, 500);
+		setContentPane(new GamePanel());
+		setVisible(true);
+	}
+	
+	class GamePanel extends JPanel{
+		JLabel avata = new JLabel("@");
+		
+		GamePanel(){
+			setLayout(null);
+			avata.setSize(20,20);
+			avata.setLocation(10, 10);
+			add(avata);
+		}
+		
+	}
+	
+	public static void main(String[] args){
+		new GameFrame();
+	}
+
+}

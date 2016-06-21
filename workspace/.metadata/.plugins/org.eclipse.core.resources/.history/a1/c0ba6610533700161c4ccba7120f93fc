@@ -1,0 +1,46 @@
+import javax.swing.JFrame;
+import javax.swing.JLabel;
+import javax.swing.JPanel;
+
+public class GameFrame extends JFrame{
+	
+	GameFrame(){
+		setTitle("moster");
+		setSize(500, 500);
+		setContentPane(new GamePanel());
+		setVisible(true);
+	}
+	
+	class GamePanel extends JPanel{
+		JLabel avata = new JLabel("@");
+		Monster monster = new Monster("M");
+		GamePanel(){
+			setLayout(null);
+			avata.setSize(20,20);
+			avata.setLocation(10, 10);
+			add(avata);
+			
+			monster.setSize(20,20);
+			monster.setLocation(400,400);
+			add(monster);
+		}
+	}
+	
+	class Monster extends JLabel implements Runnable{
+		
+		Monster(String text){
+			super(text);			
+		}
+
+		@Override
+		public void run() {
+			
+		}
+		
+	}
+	
+	public static void main(String[] args){
+		new GameFrame();
+	}
+
+}

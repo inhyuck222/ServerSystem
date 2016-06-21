@@ -5,4 +5,6 @@
 <fullyQualifiedTypeName name="VServerframe"/>
 <fullyQualifiedTypeName name="java.awt.Container"/>
 <fullyQualifiedTypeName name="java.awt.FlowLayout"/>
+<fullyQualifiedTypeName name="GameFrame.GamePanel"/>
+<fullyQualifiedTypeName name="java.awt.event.KeyEvent"/>
 </qualifiedTypeNameHistroy>

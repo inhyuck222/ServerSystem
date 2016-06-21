@@ -1,0 +1,124 @@
+import java.awt.Graphics;
+import java.awt.Image;
+import java.awt.event.KeyAdapter;
+import java.awt.event.KeyEvent;
+
+import javax.swing.ImageIcon;
+import javax.swing.JFrame;
+import javax.swing.JLabel;
+import javax.swing.JPanel;
+
+public class GameFrame extends JFrame{
+	
+	GameFrame(){
+		setTitle("moster");
+		setSize(500, 500);
+		
+		GamePanel p = new GamePanel();
+		setContentPane(p);
+		setVisible(true);
+		
+		p.requestFocus();
+	}
+	
+	class GamePanel extends JPanel{
+		JLabel avata = new JLabel("@");
+		Monster monster1 = new Monster("M", avata);
+		Monster monster2 = new Monster("M", avata);
+		Monster monster3 = new Monster("M", avata);
+		
+		ImageIcon icon = new ImageIcon("back.jpg");
+		Image img = icon.getImage();
+		
+		public void paintComponent(Graphics g){
+			super.paint(g);
+			g.drawImage(img, 0, 0, this.getWidth(), this.getHeight(), null);
+		}
+		GamePanel(){
+			setLayout(null);
+			avata.setSize(20,20);
+			avata.setLocation(10, 10);
+			add(avata);
+			
+			monster1.setSize(20,20);
+			monster1.setLocation(400,400);
+			add(monster1);
+			
+			monster2.setSize(20,20);
+			monster2.setLocation(100,400);
+			add(monster2);
+			
+			monster3.setSize(20,20);
+			monster3.setLocation(400,100);
+			add(monster3);
+			
+			Thread monsterThread1 = new Thread(monster1);
+			monsterThread1.start();
+			
+			Thread monsterThread2 = new Thread(monster2);
+			monsterThread2.start();
+			
+			Thread monsterThread3 = new Thread(monster3);
+			monsterThread3.start();
+			
+			this.addKeyListener(new KeyAdapter(){
+				public void keyPressed(KeyEvent e){
+					int code = e.getKeyCode();
+					switch(code){
+					case KeyEvent.VK_UP:
+						avata.setLocation(avata.getX(), avata.getY()-10);
+						break;
+					case KeyEvent.VK_DOWN:
+						avata.setLocation(avata.getX(), avata.getY()+10);
+						break;
+					case KeyEvent.VK_LEFT:
+						avata.setLocation(avata.getX()-10, avata.getY());
+						break;
+					case KeyEvent.VK_RIGHT:
+						avata.setLocation(avata.getX()+10, avata.getY());
+						break;
+					}
+				}
+			});
+		}
+	}
+	
+	class Monster extends JLabel implements Runnable{
+		JLabel avata;
+		Monster(String text, JLabel avata){
+			super(text);
+			this.avata = avata;
+		}
+
+		@Override
+		public void run() {
+			while(true){
+				try {
+					Thread.sleep(200);
+				} catch (InterruptedException e) {
+					return;
+				}
+				
+				int destX = avata.getX();
+				int destY = avata.getY();
+				int myX = this.getX();
+				int myY = this.getY();
+				
+				if(myX > destX)myX -= 10;
+				else myX += 10;
+				if(myY > destY)myY -= 10;
+				else myY += 10;
+				
+				this.setLocation(myX, myY);
+				
+				if(myX == destX && myY == destY)System.exit(1);
+			}
+		}
+		
+	}
+	
+	public static void main(String[] args){
+		new GameFrame();
+	}
+
+}
