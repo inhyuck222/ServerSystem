@@ -1,0 +1,37 @@
+import java.awt.*;
+import javax.swing.*;
+
+public class ServerFrame extends JFrame {
+	JTextField serverMessage = new JTextField();
+
+	public ServerFrame() {
+		super("Server");
+		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		Container c = getContentPane();
+		c.setLayout(new BorderLayout());
+		c.add(serverMessage, BorderLayout.SOUTH);
+		c.add(new JScrollPane(new Receiver()), BorderLayout.CENTER);
+		
+		setSize(300,300);
+		setVisible(true);
+		
+	}
+
+	class Receiver extends JTextArea implements Runnable {
+
+		public Receiver() {
+			this.setEditable(false);
+		}
+		
+		@Override
+		public void run() {
+			
+		}
+
+	}
+
+	public static void main(String[] args) {
+		new ServerFrame();
+	}
+
+}

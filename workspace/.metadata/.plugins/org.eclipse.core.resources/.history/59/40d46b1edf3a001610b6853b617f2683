@@ -1,0 +1,141 @@
+import java.awt.Container;
+import java.awt.FlowLayout;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.OutputStreamWriter;
+import java.net.ServerSocket;
+import java.net.Socket;
+import javax.swing.JFrame;
+import javax.swing.JLabel;
+import javax.swing.JScrollPane;
+import javax.swing.JTextArea;
+import javax.swing.JTextField;
+
+public class BroadcastServerFrame extends JFrame {
+	JTextArea textArea = new JTextArea(12, 40);
+	JScrollPane scrollArea = new JScrollPane(textArea);
+	MyTextField messageField = new MyTextField(40);
+	JLabel clientCount = new JLabel("0");
+	JLabel messageSendCount = new JLabel("0");
+
+	int clientNum = 0;
+	int sendMessageNum = 0;
+
+	public BroadcastServerFrame() {
+		this.setTitle("Broadcast Server");
+		this.setSize(600, 300);
+		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		JLabel clientLabel = new JLabel("Client Number");
+		JLabel sendLabel = new JLabel("Send Number");
+
+		Container contentPane = this.getContentPane();
+		contentPane.setLayout(new FlowLayout());
+		contentPane.add(scrollArea);
+		contentPane.add(clientLabel);
+		contentPane.add(clientCount);
+		contentPane.add(messageField);
+		contentPane.add(sendLabel);
+		contentPane.add(messageSendCount);
+		this.setVisible(true);
+
+		messageField.requestFocus();
+		messageField.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				sendMessageNum = 0;
+				messageField.notifyAllThread();
+			}
+
+		});
+
+		new ServerThread().start();
+	}
+
+	class MyTextField extends JTextField {
+
+		public MyTextField(int width) {
+			super(width);
+		}
+
+		public synchronized void waitForAction() {
+			try {
+				this.wait();
+			} catch (InterruptedException e) {
+				e.printStackTrace();
+			}
+		}
+
+		public synchronized void notifyAllThread() {
+			this.notifyAll();
+		}
+	}
+
+	class BroadcastThread extends Thread {
+
+		Socket socket = null;
+
+		public BroadcastThread(Socket socket) {
+			this.socket = socket;
+		}
+
+		@Override
+		public void run() {
+			try {
+				BufferedReader br = new BufferedReader(new InputStreamReader(socket.getInputStream()));
+				BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(socket.getOutputStream()));
+
+				while (true) {
+					messageField.waitForAction();
+
+					String message = messageField.getText();
+					bw.write(message + "\n");
+					bw.flush();
+
+					messageSendCount.setText(String.valueOf(++sendMessageNum));
+
+					textArea.append("Message : " + message + "\n");
+					messageField.setText(null);
+					scrollArea.getVerticalScrollBar().setValue(scrollArea.getVerticalScrollBar().getMaximum());
+				}
+
+			} catch (IOException e) {
+				textArea.append("Client Quit \n");
+				clientCount.setText(String.valueOf(--clientNum));
+				e.printStackTrace();
+			}
+		}
+	}
+
+	class ServerThread extends Thread {
+		@Override
+		public void run() {
+			ServerSocket serverSocket = null;
+			Socket socket = null;
+			try {
+				serverSocket = new ServerSocket(9998);
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+			while (true) {
+				try {
+					socket = serverSocket.accept();
+					textArea.append("ID : " + socket.getInetAddress().getHostName() + " Connect! \n");
+
+					clientCount.setText(String.valueOf(++clientNum));
+					new BroadcastThread(socket).start();
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
+				scrollArea.getVerticalScrollBar().setValue(scrollArea.getVerticalScrollBar().getMaximum());
+			}
+		}
+	}
+
+	public static void main(String[] args) {
+		new BroadcastServerFrame();
+	}
+}

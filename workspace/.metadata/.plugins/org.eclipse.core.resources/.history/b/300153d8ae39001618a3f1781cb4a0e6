@@ -1,0 +1,17 @@
+import java.awt.*;
+import java.io.*;
+import java.net.*;
+
+import javax.swing.*;
+
+public class DicClientFrame extends JFrame{
+	public DicClientFrame() {
+		super("클라이언트");
+	}
+
+	public static void main(String[] args) {
+		new DicClientFrame();
+		
+	}
+
+}

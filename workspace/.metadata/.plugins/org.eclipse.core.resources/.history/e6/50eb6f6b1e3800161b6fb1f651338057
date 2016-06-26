@@ -1,0 +1,65 @@
+import java.awt.Color;
+import java.awt.Graphics;
+import java.awt.Rectangle;
+
+import javax.swing.JFrame;
+import javax.swing.JPanel;
+
+public class SyncTestFrame extends JFrame {
+
+	public SyncTestFrame() {
+		setContentPane(new DrawingPanel());
+		setSize(300, 300);
+
+		setVisible(true);
+	}
+
+	class DrawingPanel extends JPanel {
+		Rectangle r = new Rectangle(0, 0, 0, 0);
+
+		public DrawingPanel() {
+			DrawinThread th = new DrawinThread();
+			th.start();
+		}
+
+		public void paintComponent(Graphics g) {
+			super.paintComponent(g);
+			if (r.width <= 0 || r.height <= 0)
+				return;
+			g.setColor(Color.MAGENTA);
+			g.drawOval(r.x, r.y, r.width, r.height);
+		}
+
+		public void set(int x, int y, int z, int h) {
+			r.x = x;
+			r.y = y;
+			r.width = z;
+			r.height = h;
+		}
+
+		class DrawinThread extends Thread {
+			public void run() {
+				while (true) {
+					try {
+						sleep(300);
+					} catch (InterruptedException e) {
+						return;
+					}
+
+					int x = (int) Math.random() * getWidth();
+					int y = (int) Math.random() * getHeight();
+					int z = (int) Math.random() * 100;
+					int h = (int) Math.random() * 100;
+
+					set(x, y, z, h);
+					repaint();
+				}
+			}
+		}
+	}
+
+	public static void main(String[] args) {
+		new SyncTestFrame();
+	}
+
+}

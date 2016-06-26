@@ -1,0 +1,130 @@
+import java.awt.Container;
+import java.awt.FlowLayout;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.OutputStreamWriter;
+import java.net.ServerSocket;
+import java.net.Socket;
+import java.util.HashMap;
+
+import javax.swing.JButton;
+import javax.swing.JFrame;
+import javax.swing.JLabel;
+import javax.swing.JScrollPane;
+import javax.swing.JTextArea;
+import javax.swing.JTextField;
+
+public class DicServerFrame extends JFrame {
+	HashMap<String, String> dic = new HashMap<String, String>();
+	JTextField eng = new JTextField(10);
+	JTextField kor = new JTextField(10);
+	JButton storeBtn = new JButton("저장");
+	JButton searchBtn = new JButton("검색");
+	JTextArea msg = new JTextArea(7, 40);
+
+	public DicServerFrame() {
+		super("서버");
+		setSize(600, 300);
+		Container c = getContentPane();
+		c.setLayout(new FlowLayout());
+		c.add(new JLabel("영어"));
+		c.add(eng);
+		c.add(new JLabel("한글"));
+		c.add(kor);
+		c.add(storeBtn);
+		c.add(searchBtn);
+		c.add(new JScrollPane(msg));
+
+		setVisible(true);
+
+		storeBtn.addActionListener(new ActionListener() {
+
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				String eText = eng.getText();
+				String kText = kor.getText();
+				dic.put(eText, kText);
+
+				eng.setText("");
+				kor.setText("");
+			}
+		});
+
+		searchBtn.addActionListener(new ActionListener() {
+
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				String eText = eng.getText();
+				String kText = dic.get(eText);
+				if (kText == null)
+					kText = "없음";
+				kor.setText(kText);
+			}
+		});
+		
+		startService();
+	}
+	
+	private void startService(){
+		new ServerThread().start();
+	}
+
+	class ServiceThread extends Thread {
+		Socket socket;
+
+		public ServiceThread(Socket socket) {
+			this.socket = socket;
+		}
+
+		public void run() {
+			try {
+				BufferedReader in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
+				BufferedWriter out = new BufferedWriter(new OutputStreamWriter(socket.getOutputStream()));
+
+				while (true) {
+					String eText = in.readLine();
+					String kText = dic.get(eText);
+					if(kText == null)kText = "없음";
+					out.write(kText+"\n");
+					out.flush();
+					msg.append(eText + ", " + kText + "\n");
+				}
+				
+			} catch (IOException e) {
+				System.out.println("클라이언트 종료");
+				e.printStackTrace();
+			}
+		}
+	}
+
+	class ServerThread extends Thread {
+
+		public void run() {
+			ServerSocket listner = null;
+			Socket socket = null;
+			try {
+				listner = new ServerSocket(14874);
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+
+			while (true) {
+				try {
+					socket = listner.accept();
+					msg.append("클라이언트 접속\n");
+					new ServiceThread(socket).start();
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
+			}
+		}
+	}
+
+	public static void main(String[] args) {
+		new DicServerFrame();
+	}
+}

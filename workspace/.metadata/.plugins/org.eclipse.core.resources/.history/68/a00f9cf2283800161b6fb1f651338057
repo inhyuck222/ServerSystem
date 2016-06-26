@@ -1,0 +1,117 @@
+import java.awt.Color;
+import java.awt.Graphics;
+import java.awt.Rectangle;
+import java.util.Vector;
+
+import javax.swing.JFrame;
+import javax.swing.JPanel;
+
+public class MyFrame extends JFrame {
+	public MyFrame() {
+		setContentPane(new DrawingPanel());
+		setSize(300, 300);
+
+		setVisible(true);
+	}
+
+	class MyRectangle extends Rectangle {
+		Color c;
+
+		public MyRectangle(int x, int y, int w, int h, Color c) {
+			super(x, y, w, h);
+			this.c = c;
+		}
+
+		public Color getColor() {
+			return c;
+		}
+	}
+
+	class DrawingPanel extends JPanel {
+		Vector<MyRectangle> v = new Vector<MyRectangle>();
+
+		public DrawingPanel() {
+			new ProducerThread(this).start();
+
+		}
+
+		public void addRectangle(MyRectangle r) {
+			v.addElement(r);
+			repaint();
+			this.notify();
+		}
+
+		public synchronized void removeRectangle() {
+			if (v.size() == 0) {
+				try {
+					this.wait();
+				} catch (InterruptedException e) {
+					return;
+				}
+			}
+			v.remove(0);
+		}
+
+		public void paintComponent(Graphics g) {
+			super.paintComponent(g);
+			for (int i = 0; i < v.size(); i++) {
+				MyRectangle r = v.get(i);
+				if (r.width <= 0 || r.height <= 0)
+					continue;
+				g.setColor(r.getColor());
+				g.drawOval(r.x, r.y, r.width, r.height);
+			}
+		}
+	}
+
+	class ProducerThread extends Thread {
+		DrawingPanel p;
+
+		public ProducerThread(DrawingPanel p) {
+			this.p = p;
+		}
+
+		public void run() {
+			while (true) {
+				try {
+					sleep(300);
+
+					int x = (int) (Math.random() * getWidth());
+					int y = (int) (Math.random() * getHeight());
+					int w = (int) (Math.random() * 100) + 1;
+					int h = (int) (Math.random() * 100) + 1;
+
+					MyRectangle r = new MyRectangle(x, y, w, h, new Color((int) (Math.random() * 256),
+							(int) (Math.random() * 256), (int) (Math.random() * 256)));
+					p.addRectangle(r);
+
+				} catch (InterruptedException e) {
+					return;
+				}
+			}
+		}
+	}
+
+	class ConsumerThread extends Thread {
+		DrawingPanel p;
+
+		public ConsumerThread(DrawingPanel p) {
+			this.p = p;
+		}
+
+		public void run() {
+			while (true) {
+				try {
+					sleep(300);
+					p.removeRectangle();
+				} catch (InterruptedException e) {
+					return;
+				}
+			}
+		}
+	}
+
+	public static void main(String[] args) {
+		new MyFrame();
+	}
+}

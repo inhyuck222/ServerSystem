@@ -1,0 +1,50 @@
+import java.awt.BorderLayout;
+import java.awt.Container;
+import java.awt.FlowLayout;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.util.HashMap;
+
+import javax.swing.JButton;
+import javax.swing.JFrame;
+import javax.swing.JScrollPane;
+import javax.swing.JTextArea;
+import javax.swing.JTextField;
+
+public class ServerFrame extends JFrame{
+	JTextField msgField = new JTextField(10);
+	JButton sendBtn = new JButton("°Ë»ö");
+	JTextArea statusArea = new JTextArea(7, 40);
+	
+	public ServerFrame(){
+		super("server");
+		setSize(600,300);
+		Container c = getContentPane();
+		c.setLayout(new BorderLayout());
+		c.setLayout(new FlowLayout());
+		
+		c.add(new JScrollPane(statusArea), BorderLayout.CENTER);
+		c.add(sendBtn, BorderLayout.SOUTH);
+		c.add(msgField, BorderLayout.NORTH);
+		statusArea.setEditable(false);
+		
+		setVisible(true);
+		
+		sendBtn.addActionListener(new ActionListener() {
+
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				String eText = eng.getText();
+				String kText = kor.getText();
+				dic.put(eText, kText);
+
+				eng.setText("");
+				kor.setText("");
+			}
+		});
+	}
+	public static void main(String[] args){
+		new ServerFrame();
+	}
+
+}

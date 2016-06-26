@@ -1,0 +1,67 @@
+import java.awt.Container;
+import java.awt.FlowLayout;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.net.ServerSocket;
+import java.util.HashMap;
+
+import javax.swing.JButton;
+import javax.swing.JFrame;
+import javax.swing.JLabel;
+import javax.swing.JTextField;
+
+public class DicServerFrame extends JFrame {
+	HashMap<String, String> dic = new HashMap<String, String>();
+	JTextField eng = new JTextField(10);
+	JTextField kor = new JTextField(10);
+	JButton storeBtn = new JButton("저장");
+	JButton searchBtn = new JButton("검색");
+
+	public DicServerFrame() {
+		setSize(600, 300);
+		Container c = getContentPane();
+		c.setLayout(new FlowLayout());
+		c.add(new JLabel("영어"));
+		c.add(eng);
+		c.add(new JLabel("한글"));
+		c.add(kor);
+		c.add(storeBtn);
+		c.add(searchBtn);
+		
+		setVisible(true);
+		
+		storeBtn.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				String eText = eng.getText();
+				String kText = kor.getText();
+				dic.put(eText, kText);	
+				
+				eng.setText("");
+				kor.setText("");
+			}
+		});
+		
+		searchBtn.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				String eText = eng.getText();
+				String kText = (String)dic.get(eText);
+				if(kText == null)kText = "없음";
+				kor.setText(kText);
+			}
+		});
+	}
+	
+	class ServerThread extends Thread{
+		public void run(){
+			ServerSocket listner = new 
+		}
+	}
+
+	public static void main(String[] args) {
+		new DicServerFrame();
+	}
+}

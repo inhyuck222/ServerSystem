@@ -1,0 +1,55 @@
+import java.awt.Color;
+import java.awt.Graphics;
+import java.awt.Rectangle;
+import java.util.Vector;
+
+import javax.swing.JFrame;
+import javax.swing.JPanel;
+
+public class MyFrame extends JFrame {
+	public MyFrame() {
+		setContentPane(new DrawingPanel());
+		setSize(300, 300);
+
+		setVisible(true);
+	}
+
+	class DrawingPanel extends JPanel {
+		Vector<Rectangle> v = new Vector<Rectangle>();
+
+		public void paintComponent(Graphics g) {
+			super.paintComponent(g);
+			for (int i = 0; i < v.size(); i++) {
+				Rectangle r = v.get(i);
+				if (r.width <= 0 || r.height <= 0)
+					continue;
+				g.setColor(new Color((int) (Math.random() * 256), (int) (Math.random() * 256),
+						(int) (Math.random() * 256)));
+				g.drawOval(r.x, r.y, r.width, r.height);
+			}
+		}
+	}
+
+	class ProducerThread extends Thread {
+		Rectangle r = new Rectangle(0, 0, 0, 0);
+
+		public void run() {
+			while (true) {
+				try {
+					sleep(300);
+					
+				} catch (InterruptedException e) { return; }
+			}
+		}
+	}
+
+	class ConsumerThread extends Thread {
+		public void run() {
+		}
+	}
+
+	public static void main(String[] args) {
+		new MyFrame();
+	}
+
+}

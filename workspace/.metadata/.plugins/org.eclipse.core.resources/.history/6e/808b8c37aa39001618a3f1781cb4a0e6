@@ -1,0 +1,34 @@
+import java.awt.Container;
+import java.awt.FlowLayout;
+import java.util.HashMap;
+
+import javax.swing.JButton;
+import javax.swing.JFrame;
+import javax.swing.JLabel;
+import javax.swing.JTextField;
+
+public class DicServerFrame extends JFrame {
+	HashMap<String, String> dic = new HashMap<String, String>();
+	JTextField eng = new JTextField(10);
+	JTextField kor = new JTextField(10);
+	JButton storeBtn = new JButton("저장");
+	JButton searchBtn = new JButton("검색");
+
+	public DicServerFrame() {
+		setSize(300, 300);
+		Container c = getContentPane();
+		c.setLayout(new FlowLayout());
+		c.add(new JLabel("영어"));
+		c.add(eng);
+		c.add(new JLabel("한글"));
+		c.add(kor);
+		c.add(storeBtn);
+		c.add(searchBtn);
+		
+		setVisible(true);
+	}
+
+	public static void main(String[] args) {
+
+	}
+}

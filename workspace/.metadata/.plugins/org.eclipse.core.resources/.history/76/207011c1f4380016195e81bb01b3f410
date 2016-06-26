@@ -1,0 +1,46 @@
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
+import java.io.IOException;
+import java.net.Socket;
+
+import javax.swing.JFrame;
+import javax.swing.JTextArea;
+import javax.swing.JTextField;
+
+
+public class ClientFrame extends JFrame{
+	JTextField serverMessage = new JTextField();
+	BufferedReader in;
+	BufferedReader stdIn;
+	BufferedWriter out;
+	Socket socket = null;
+	Receiver receiver = new Receiver();
+	
+	public ClientFrame() {
+		super("client");
+		
+	}
+	
+	class Receiver extends JTextArea implements Runnable {
+
+		public Receiver() {
+			this.setEditable(false);
+		}
+
+		public void run() {
+			while(true){
+				try {
+					String inputMessage = in.readLine();
+					this.append("\n"+inputMessage);
+				} catch (IOException e) {
+					return;
+				}
+			}
+		}
+
+	}
+
+	public static void main(String[] args) {
+		
+	}
+}

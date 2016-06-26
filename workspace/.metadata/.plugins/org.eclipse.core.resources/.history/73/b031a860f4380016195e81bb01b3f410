@@ -1,0 +1,23 @@
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
+import java.net.Socket;
+
+import javax.swing.JFrame;
+import javax.swing.JTextField;
+
+public class ClientFrame extends JFrame{
+	JTextField serverMessage = new JTextField();
+	BufferedReader in;
+	BufferedReader stdIn;
+	BufferedWriter out;
+	Socket socket = null;
+	
+	public ClientFrame() {
+		super("client");
+		
+	}
+
+	public static void main(String[] args) {
+		
+	}
+}

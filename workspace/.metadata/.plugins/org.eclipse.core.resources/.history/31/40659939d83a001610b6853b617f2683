@@ -1,0 +1,10 @@
+import javax.swing.JFrame;
+import javax.swing.JTextArea;
+
+public class ClientFrame extends JFrame{
+	JTextArea statusArea = new JTextArea(7, 40);
+	
+	public static void main(String[] args){
+		new ClientFrame();		
+	}
+}

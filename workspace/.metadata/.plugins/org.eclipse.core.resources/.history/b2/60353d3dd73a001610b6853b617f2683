@@ -1,0 +1,34 @@
+import java.awt.BorderLayout;
+import java.awt.Container;
+import java.awt.FlowLayout;
+import java.util.HashMap;
+
+import javax.swing.JButton;
+import javax.swing.JFrame;
+import javax.swing.JScrollPane;
+import javax.swing.JTextArea;
+import javax.swing.JTextField;
+
+public class ServerFrame extends JFrame{
+	JTextField msgField = new JTextField(10);
+	JButton searchBtn = new JButton("°Ë»ö");
+	JTextArea statusArea = new JTextArea(7, 40);
+	
+	public ServerFrame(){
+		super("server");
+		setSize(600,300);
+		Container c = getContentPane();
+		c.setLayout(new BorderLayout());
+		c.setLayout(new FlowLayout());
+		
+		c.add(new JScrollPane(statusArea), BorderLayout.CENTER);
+		c.add(searchBtn, BorderLayout.SOUTH);
+		c.add(msgField, BorderLayout.NORTH);
+		
+		setVisible(true);
+	}
+	public static void main(String[] args){
+		new ServerFrame();
+	}
+
+}
